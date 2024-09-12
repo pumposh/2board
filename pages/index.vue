@@ -19,6 +19,7 @@
         .
       </div>
     </div>
+    <FirebaseVerification />
     <div class="footer">
       <a href="https://vercel.com">
         <img
@@ -45,5 +46,18 @@
 </style>
 
 <script setup>
+import { onMounted } from 'vue'
+import FirebaseVerification from '~/components/FirebaseVerification.vue'
+
 const { data } = useFetch('/api/get-users')
+
+onMounted(() => {
+  const { $firebase } = useNuxtApp()
+  console.log("Firebase app initialized:", $firebase.app)
+  if ($firebase.analytics) {
+    console.log("Firebase analytics initialized")
+  } else {
+    console.log("Firebase analytics not initialized (this is normal on server-side)")
+  }
+})
 </script>

@@ -35,7 +35,7 @@
 </template>
 
 <style lang="scss">
-@import '~/assets/scss/Table.scss';
+@import '~/assets/scss/table.scss';
 </style>
 
 <script>

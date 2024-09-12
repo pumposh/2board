@@ -1,46 +1,44 @@
 <template>
-  <div
-    class="w-full max-w-xl p-12 mx-auto rounded-lg shadow-xl dark:bg-white/10 bg-white/30 ring-1 ring-gray-900/5 backdrop-blur-lg"
-  >
-    <div class="flex items-center justify-between mb-4">
-      <div class="space-y-1">
-        <h2 class="text-xl font-semibold">Recent Users</h2>
-        <p class="text-sm text-gray-500">
+  <div class="table-container">
+    <div class="header">
+      <div>
+        <h2 class="header-title">Recent Users</h2>
+        <p class="header-info">
           Fetched {{ users?.length }} users in {{ duration }}ms
         </p>
       </div>
-      <button class="hover:opacity-80" @click="refreshPage">
+      <button class="refresh-button" @click="refreshPage">
         Refresh Page
       </button>
     </div>
-    <div class="divide-y divide-gray-900/5">
+    <div>
       <div
         v-for="user in users"
         :key="user.id"
-        class="flex items-center justify-between py-3"
+        class="user-row"
       >
-        <div class="flex items-center space-x-4">
+        <div class="user-info">
           <img
             :src="user.image"
             :alt="user.name"
-            :width="48"
-            :height="48"
-            class="rounded-full ring-1 ring-gray-900/5"
+            class="user-image"
           />
-          <div class="space-y-1">
-            <p class="font-medium leading-none">{{ user?.name }}</p>
-            <p class="text-sm text-gray-500">{{ user?.email }}</p>
+          <div>
+            <p class="user-name">{{ user?.name }}</p>
+            <p class="user-email">{{ user?.email }}</p>
           </div>
         </div>
-        <p class="text-sm text-gray-500">{{ timeAgo(user?.createdAt) }}</p>
+        <p class="user-time">{{ timeAgo(user?.createdAt) }}</p>
       </div>
     </div>
   </div>
 </template>
 
-<script>
-import ms from 'ms'
+<style lang="scss">
+@import '~/assets/scss/Table.scss';
+</style>
 
+<script>
 export default {
   props: {
     users: {
@@ -53,14 +51,12 @@ export default {
     },
   },
   methods: {
-    timeAgo(timestamp, timeOnly) {
-      if (!timestamp) return 'never'
-      return `${ms(Date.now() - new Date(timestamp).getTime())}${
-        timeOnly ? '' : ' ago'
-      }`
+    timeAgo(timestamp) {
+      if (!timestamp) return 'never';
+      return `${ms(Date.now() - new Date(timestamp).getTime())} ago`;
     },
     refreshPage() {
-      location.reload()
+      location.reload();
     },
   },
 }

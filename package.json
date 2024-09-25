@@ -12,6 +12,7 @@
     "postinstall": "nuxt prepare"
   },
   "devDependencies": {
+    "@playwright/test": "^1.47.2",
     "@types/node": "^18",
     "nuxt": "^3.4.2",
     "turbo": "^1.9.3"

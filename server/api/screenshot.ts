@@ -1,7 +1,8 @@
-import { chromium } from "playwright";
+import { webkit } from "playwright";
+import { ab2blob, buffer2ab } from "~/utils/data";
 
 async function takeScreenshot(url: string) {
-  const browser = await chromium.launch();
+  const browser = await webkit.launch();
   const page = await browser.newPage();
 
   try {
@@ -32,10 +33,16 @@ export default defineEventHandler(async (event) => {
     console.log("Taking screenshot of:", url);
     const screenshot = await takeScreenshot(url);
     console.log(screenshot);
+    if ('error' in screenshot) throw screenshot;
+    const arrayBuffer = buffer2ab(screenshot);
+    const blob = ab2blob(arrayBuffer);
     setHeader(event, "Content-Type", "image/png");
-    return screenshot;
+    return blob;
   } catch (error) {
     console.error("Screenshot error:", error);
-    return { error: "Failed to take screenshot" };
+    return createError({
+      statusCode: 500,
+      statusMessage: `Failed to take screenshot: ${error instanceof Error ? error.message : "Unknown error"}`,
+    });
   }
 });

@@ -12,7 +12,7 @@ export default defineNuxtConfig({
   },
 
   plugins: [
-    '~/plugins/firebase.js' // Register the Firebase plugin
+    '~/plugins/firebase' // Register the Firebase plugin
   ],
 
   runtimeConfig: {

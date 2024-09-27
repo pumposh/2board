@@ -16,7 +16,7 @@
   const takeScreenshot = async () => {
     if (!url.value) return
     try {
-      const response = await fetch(`/api/screenshot?url=${encodeURIComponent(url.value)}`)
+      const response = await useFetch(`/api/screenshot`, { query: { url: url.value } })
       if (response.ok) {
         const blob = await response.blob()
         screenshotUrl.value = URL.createObjectURL(blob)

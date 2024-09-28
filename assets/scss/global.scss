@@ -1,10 +1,5 @@
 // assets/scss/global.scss
-
 body {
     color: $foreground-rgb;
-    background: linear-gradient(
-      to bottom,
-      transparent,
-      $background-end-rgb
-    ) $background-start-rgb;
-  }
+    background: $background-color;
+}

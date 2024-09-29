@@ -1,7 +1,3 @@
-import { defineEventHandler, readBody } from "h3";
-import { createError } from "h3";
-import { useRuntimeConfig } from "#app";
-
 export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig();
   const body = await readBody(event);

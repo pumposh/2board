@@ -10,3 +10,6 @@ dist
 .vercel
 .turbo
 *.tsbuildinfo
+.vscode
+.vscode/*
+bun.lockb

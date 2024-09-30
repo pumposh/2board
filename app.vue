@@ -9,6 +9,7 @@
 <script setup lang="ts">
 /** Load font-awesome icons */
 useHead({
+  title: '2Board',
   script: [
     {
       src: 'https://kit.fontawesome.com/aaef78e0d5.js',

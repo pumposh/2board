@@ -5,6 +5,14 @@ const customComponents: Record<string, string> = {
 }
 
 export default defineNuxtConfig({
+  app: {
+    head: {
+      charset: 'utf-8',
+      title: '2board',
+      viewport: 'width=device-width, initial-scale=1',
+    }
+  },
+
   components: {
     global: true,
     dirs: ['~/components'],
@@ -52,13 +60,13 @@ export default defineNuxtConfig({
 
   compatibilityDate: '2024-09-11',
   modules: ['@nuxt/fonts'],
-  fonts: {
-    families: [
-      { name: 'Montserrat', provider: 'google' },
-      { name: 'Quicksand', provider: 'google' },
-    ]
-  },
-  app: {
-    pageTransition: { name: 'page', mode: 'out-in' }
-  },
+    fonts: {
+      families: [
+        { name: 'Montserrat', provider: 'google' },
+        { name: 'Quicksand', provider: 'google' },
+      ]
+    },
+    app: {
+      pageTransition: { name: 'page', mode: 'out-in' }
+    },
 })

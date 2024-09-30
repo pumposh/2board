@@ -6,11 +6,30 @@
                 <div class="SideBar-logo-text">2Board</div>
             </div>
             <div class="SideBar__footer">
-                <div class="SideBar__hue-sat-picker-container">
-                    <TwoHueSatPicker class="SideBar__hue-sat-picker" />
+                <div class="SideBar__hue-sat-picker-container"
+                    :class="{
+                        'SideBar__hue-sat-picker-container--hidden': !isHueSatPickerOpen && !isHueSatPickerHovered,
+                    }"
+                >
+                    <TwoHueSatPicker
+                        class="SideBar__hue-sat-picker"
+                        @unfocus="() => toggleHueSatPicker(false)"
+                        @mouseover="() => setHueSatHoverState(true)"
+                        @mouseleave="() => setHueSatHoverState(false)"
+                    />
                 </div>
                 <div class="SideBar__footer-icons">
-                    <SchemeToggle class="SideBar__scheme-toggle" />
+                    <span class="SideBar__extra-buttons">
+                        <TwoButton
+                            class="SideBar__footer-button"
+                            icon="fa-solid fa-palette"
+                            :variant="!isHueSatPickerOpen ? 'ghost' : ''"
+                            @click="() => toggleHueSatPicker(false)"
+                            @mouseover="() => setHueSatHoverState(true)"
+                            @mouseleave="() => setHueSatHoverState(false)"
+                        />
+                        <SchemeToggle class="SideBar__scheme-toggle" />
+                    </span>
                     <TwoButton
                         class="SideBar__footer-button"
                         icon="fa-solid fa-mattress-pillow"
@@ -35,11 +54,23 @@ import TwoButton from '@ui/TwoButton.vue';
 import SchemeToggle from '@ui/SideBar/SchemeToggle.vue';
 import Routes from '@ui/SideBar/Routes.vue';
 import { useMediaQuery } from '@utils/extensions/dom';
-import { useCookie } from 'nuxt/app';
+import { asyncTimeout } from '@utils/extensions/timeout';
 
 const isLocked = useCookie<boolean>('isLocked', { 
     default: () => false,
 });
+
+const isHueSatPickerOpen = ref<boolean>(false);
+const isHueSatPickerHovered = ref<boolean>(false);
+const setHueSatHoverState = (isHovered: boolean) => {
+    isHueSatPickerHovered.value = isHovered;
+};
+
+const toggleHueSatPicker = async () => {
+    isHueSatPickerOpen.value = !isHueSatPickerOpen.value;
+    await asyncTimeout(2000);
+    isHueSatPickerOpen.value = false;
+};
 
 const emit = defineEmits<{
     (event: 'update:isLocked', value: boolean): void;
@@ -78,6 +109,7 @@ const sideBarClasses = computed<string[]>(() => {
 <style scoped lang="scss">
 $default-padding-mobile: 10px;
 $default-padding: 15px;
+$header-padding: 90px;
 
 $inner-width: 300px;
 $inner-width-mobile: calc(100dvw - $default-padding-mobile * 2);
@@ -102,7 +134,7 @@ $inner-width-mobile: calc(100dvw - $default-padding-mobile * 2);
     }
     .SideBar__persistent-content {
         padding: 0 $default-padding-mobile;
-        width: calc($inner-width-mobile - $default-padding-mobile * 2);
+        width: calc($inner-width-mobile - $default-padding-mobile * 3);
         @media (min-width: 768px) {
             top: $default-padding;
             left: $default-padding;
@@ -117,12 +149,24 @@ $inner-width-mobile: calc(100dvw - $default-padding-mobile * 2);
             display: block;
         }
     }
-    .SideBar__scheme-toggle {
+    .SideBar__scheme-toggle, .SideBar__footer-button--hue-sat-toggle {
         display: block;
         opacity: 1;
         right: $default-padding-mobile;
         @media (min-width: 768px) {
             right: unset;
+        }
+    }
+    .SideBar__extra-buttons {
+        opacity: 1;
+        pointer-events: auto;
+    }
+    .SideBar__footer-icons {
+        justify-content: space-between;
+        flex-direction: row;
+        @media (min-width: 768px) {
+            flex-direction: row-reverse;
+            width: calc($inner-width - ($default-padding * 2 + 15px));
         }
     }
     .SideBar-logo {
@@ -140,6 +184,7 @@ $inner-width-mobile: calc(100dvw - $default-padding-mobile * 2);
 @mixin openAndLockedSideBar {
     .SideBar__underlay {
         box-shadow: none;
+        border-radius: 0 $tb-border-radius $tb-border-radius 0;
         height: calc(100%);
         top: 0;
         left: 0;
@@ -247,8 +292,8 @@ $inner-width-mobile: calc(100dvw - $default-padding-mobile * 2);
     margin: 0;
     margin-left: $default-padding-mobile;
     width: 0px;
-    height: calc(100% - 90px);
-    padding: 90px 0 0 0;
+    height: calc(100% - $header-padding);
+    padding: $header-padding 0 0 0;
     overflow: hidden;
     pointer-events: auto;
     @media (min-width: 768px) {
@@ -329,13 +374,15 @@ $inner-width-mobile: calc(100dvw - $default-padding-mobile * 2);
 
 .SideBar__hue-sat-picker-container {
     position: absolute;
-    bottom: calc(-100dvh + 100px);
-    left: 0;
-    right: 0;
+    bottom: calc(-100dvh + $header-padding + $default-padding);
+    left: $default-padding-mobile;
+    right: $default-padding-mobile;
     transition: all var(--transition-speed) ease-in-out;
     opacity: 0;
     max-width: 0%;
     overflow: hidden;
+    box-shadow: 0 0 15px 5px rgba(0, 0, 0, 0.1);
+    border-radius: $tb-border-radius;
     @media (min-width: 768px) {
         display: block;
         position: relative;
@@ -343,6 +390,16 @@ $inner-width-mobile: calc(100dvw - $default-padding-mobile * 2);
         left: unset;
         right: unset;
         width: 100%;
+        opacity: 1;
+    }
+}
+
+.SideBar__hue-sat-picker-container--hidden {
+    display: none;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    &:hover {
+        opacity: 1 !important;
     }
 }
 
@@ -350,7 +407,11 @@ $inner-width-mobile: calc(100dvw - $default-padding-mobile * 2);
     display: flex;
     flex-direction: column;
     gap: $default-padding-mobile;
-    width: 100%;
+    transition: all var(--transition-speed) ease-in-out;
+    width: calc($inner-width-mobile - $default-padding-mobile * 2);
+    @media (min-width: 768px) {
+        width: calc($inner-width - ($default-padding * 2 + 15px));
+    }
     &:hover {
         pointer-events: auto;
     }
@@ -362,21 +423,31 @@ $inner-width-mobile: calc(100dvw - $default-padding-mobile * 2);
     justify-content: flex-end;
     align-items: center;
     gap: $default-padding-mobile;
+    transition: all var(--transition-speed) ease-in-out;
     padding: $default-padding-mobile 0;
-    .SideBar__footer-button {
-        opacity: 0.7;
+    @media (min-width: 768px) {
+        width: calc($inner-width - ($default-padding * 2 + 15px));
     }
 }
 
-.SideBar__scheme-toggle {
-    position: absolute;
+.SideBar__extra-buttons {
+    display: flex;
     opacity: 0;
-    display: none;
+    position: absolute;
+    flex-direction: row;
+    justify-content: space-between;
     transition: all var(--transition-speed) ease-in-out;
+    pointer-events: none;
+    flex-wrap: nowrap;
+    gap: $default-padding-mobile;
+    width: calc($inner-width-mobile - $default-padding-mobile * 2 - 60px);
+    left: 60px;
     @media (min-width: 768px) {
+        display: flex;
         position: relative;
-        display: block;
-        opacity: 0.3;
+        opacity: 0;
+        left: unset;
+        width: 100%;
     }
 }
 </style>

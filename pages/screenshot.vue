@@ -25,6 +25,18 @@ definePageMeta({
   navIcon: 'fa-solid fa-window-restore',
 })
 
+useHead({
+  title: '2Board - Screenshot',
+  meta: [
+    { name: 'description', content: 'Take a screenshot of a website.' },
+  ],
+})
+
+useSeoMeta({
+  title: 'Screenshot',
+  description: 'Take a screenshot of a website.',
+})
+
 const url = ref("https://www.google.com");
 const file = ref<File | null>(null);
 const fileUrl = computed(() =>

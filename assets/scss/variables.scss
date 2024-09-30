@@ -1,9 +1,9 @@
 // assets/scss/variables.scss
 @function base-with-lightness($lightness) {
-    // I’m using this to test various base colors for a dynamic color scheme
-    $base-hue: 203;
-    $base-saturation: 22%;
-    @return hsl($base-hue, $base-saturation, $lightness);
+  // I’m using this to test various base colors for a dynamic color scheme
+  $base-hue: 203;
+  $base-saturation: 22%;
+  @return hsl($base-hue, $base-saturation, $lightness);
 }
 
 // Color scheme
@@ -27,66 +27,81 @@ $tb-grey-800: #1e293b;
 $tb-grey-900: #0f172a;
 $tb-border-radius: 16px;
 @function apply-transparency($color, $transparency) {
-    @return color-mix(in srgb, $color, transparent $transparency);
+  @return color-mix(in srgb, $color, transparent $transparency);
+}
+
+@mixin light-mode {
+  --background-color: color-mix(in sRGB, var(--tb-primary-300), var(--tb-grey-300) 50%);
+  --text-color: var(--tb-grey-700);
+  --input-bg: color-mix(in sRGB, var(--tb-primary-100), transparent 35%);
+  --button-bg: color-mix(in sRGB, var(--tb-primary-400), transparent 80%);
+  --input-color: var(--tb-grey-900);
+  --button-color: var(--tb-grey-700);
+  --input-color-placeholder: color-mix(in sRGB, var(--tb-grey-800), transparent 60%);
+  --input-outline: 2px solid color-mix(in sRGB, var(--tb-primary-600), transparent 80%);
+  --logo-filter: invert(0);
+  --side-bar-bg: color-mix(in sRGB, var(--tb-primary-300), var(--tb-grey-100) 60%);
+  --side-bar-outline: 2px solid color-mix(in sRGB, var(--tb-primary-400), var(--tb-grey-500) 75%);
+  --side-bar-shadow: 0 0 64px 0 rgba(0, 0, 0, 0.25);
+}
+
+@mixin dark-mode {
+  --background-color: color-mix(in sRGB, var(--tb-primary-800), #222222 70%);
+  --text-color: color-mix(in sRGB, var(--tb-grey-200), transparent 30%);
+  --input-bg: color-mix(in sRGB, var(--tb-grey-300), transparent 94%);
+  --button-bg: color-mix(in sRGB, var(--tb-primary-300), transparent 80%);
+  --input-color: var(--tb-grey-300);
+  --button-color: var(--tb-grey-200);
+  --input-color-placeholder: color-mix(in sRGB, var(--tb-grey-300), transparent 60%);
+  --input-outline: 2px solid color-mix(in sRGB, var(--tb-primary-300), transparent 80%);
+  --logo-filter: invert(1);
+  --side-bar-shadow: 0 0 64px 0 rgba(0, 0, 0, 0.15);
+  --side-bar-bg: color-mix(in sRGB, var(--tb-primary-600), var(--tb-grey-900) 75%);
+  --side-bar-outline: 2px solid color-mix(in sRGB, var(--tb-primary-400), var(--tb-grey-500) 75%);
 }
 
 :root {
-    --base-hue: 203;
-    --base-saturation: 22%;
-    --grey-saturation: 5%;
-    // Color scheme
-    --tb-primary-100: hsl(var(--base-hue), var(--base-saturation), 90%);
-    --tb-primary-200: hsl(var(--base-hue), var(--base-saturation), 80%);
-    --tb-primary-300: hsl(var(--base-hue), var(--base-saturation), 70%);
-    --tb-primary-400: hsl(var(--base-hue), var(--base-saturation), 60%);
-    --tb-primary-500: hsl(var(--base-hue), var(--base-saturation), 50%);
-    --tb-primary-600: hsl(var(--base-hue), var(--base-saturation), 40%);
-    --tb-primary-700: hsl(var(--base-hue), var(--base-saturation), 30%);
-    --tb-primary-800: hsl(var(--base-hue), var(--base-saturation), 20%);
-    --tb-primary-900: hsl(var(--base-hue), var(--base-saturation), 10%);
-    --tb-grey-100: hsl(var(--base-hue), var(--grey-saturation), 90%);
-    --tb-grey-200: hsl(var(--base-hue), var(--grey-saturation), 80%);
-    --tb-grey-300: hsl(var(--base-hue), var(--grey-saturation), 70%);
-    --tb-grey-400: hsl(var(--base-hue), var(--grey-saturation), 60%);
-    --tb-grey-500: hsl(var(--base-hue), var(--grey-saturation), 50%);
-    --tb-grey-600: hsl(var(--base-hue), var(--grey-saturation), 40%);
-    --tb-grey-700: hsl(var(--base-hue), var(--grey-saturation), 30%);
-    --tb-grey-800: hsl(var(--base-hue), var(--grey-saturation), 20%);
-    --tb-grey-900: hsl(var(--base-hue), var(--grey-saturation), 10%);
-    --tb-border-radius: 16px;
-    --transition-speed: 0.2s;
+  --base-hue: 203;
+  --base-saturation: 22%;
+  --grey-saturation: 5%;
+  // Color scheme
+  --tb-primary-100: hsl(var(--base-hue), var(--base-saturation), 90%);
+  --tb-primary-200: hsl(var(--base-hue), var(--base-saturation), 80%);
+  --tb-primary-300: hsl(var(--base-hue), var(--base-saturation), 70%);
+  --tb-primary-400: hsl(var(--base-hue), var(--base-saturation), 60%);
+  --tb-primary-500: hsl(var(--base-hue), var(--base-saturation), 50%);
+  --tb-primary-600: hsl(var(--base-hue), var(--base-saturation), 40%);
+  --tb-primary-700: hsl(var(--base-hue), var(--base-saturation), 30%);
+  --tb-primary-800: hsl(var(--base-hue), var(--base-saturation), 20%);
+  --tb-primary-900: hsl(var(--base-hue), var(--base-saturation), 10%);
+  --tb-grey-100: hsl(var(--base-hue), var(--grey-saturation), 90%);
+  --tb-grey-200: hsl(var(--base-hue), var(--grey-saturation), 80%);
+  --tb-grey-300: hsl(var(--base-hue), var(--grey-saturation), 70%);
+  --tb-grey-400: hsl(var(--base-hue), var(--grey-saturation), 60%);
+  --tb-grey-500: hsl(var(--base-hue), var(--grey-saturation), 50%);
+  --tb-grey-600: hsl(var(--base-hue), var(--grey-saturation), 40%);
+  --tb-grey-700: hsl(var(--base-hue), var(--grey-saturation), 30%);
+  --tb-grey-800: hsl(var(--base-hue), var(--grey-saturation), 20%);
+  --tb-grey-900: hsl(var(--base-hue), var(--grey-saturation), 10%);
+  --tb-border-radius: 16px;
+  --transition-speed: 0.2s;
+  @include light-mode;
+  @media (prefers-color-scheme: light) {
+    @include light-mode;
+  }
+  @media (prefers-color-scheme: dark) {
+    @include dark-mode;
+  }
 }
 
-@container root style(--darkmode: 0) {
-    body {
-        --background-color: color-mix(in sRGB, var(--tb-primary-300), var(--tb-grey-300) 50%);
-        --text-color: var(--tb-grey-700);
-        --input-bg: color-mix(in sRGB, var(--tb-primary-100), transparent 35%);
-        --button-bg: color-mix(in sRGB, var(--tb-primary-400), transparent 80%);
-        --input-color: var(--tb-grey-900);
-        --button-color: var(--tb-grey-700);
-        --input-color-placeholder: color-mix(in sRGB, var(--tb-grey-800), transparent 60%);
-        --input-outline: 2px solid color-mix(in sRGB, var(--tb-primary-600), transparent 80%);
-        --logo-filter: invert(0);
-        --side-bar-bg: color-mix(in sRGB, var(--tb-primary-300), var(--tb-grey-100) 60%);
-        --side-bar-outline: 2px solid color-mix(in sRGB, var(--tb-primary-400), var(--tb-grey-500) 75%);
-        --side-bar-shadow: 0 0 64px 0 rgba(0, 0, 0, 0.25);
-    }
+html:has(#color-scheme-light:checked) {
+  body {
+    @include light-mode;
+  }
 }
 
-@container root style(--darkmode: 1) {
-    body {
-        --background-color: color-mix(in sRGB, var(--tb-primary-800), #222222 70%);
-        --text-color: color-mix(in sRGB, var(--tb-grey-200), transparent 30%);
-        --input-bg: color-mix(in sRGB, var(--tb-grey-300), transparent 94%);
-        --button-bg: color-mix(in sRGB, var(--tb-primary-300), transparent 80%);
-        --input-color: var(--tb-grey-300);
-        --button-color: var(--tb-grey-200);
-        --input-color-placeholder: color-mix(in sRGB, var(--tb-grey-300), transparent 60%);
-        --input-outline: 2px solid color-mix(in sRGB, var(--tb-primary-300), transparent 80%);
-        --logo-filter: invert(1);
-        --side-bar-shadow: 0 0 64px 0 rgba(0, 0, 0, 0.15);
-        --side-bar-bg: color-mix(in sRGB, var(--tb-primary-600), var(--tb-grey-900) 75%);
-        --side-bar-outline: 2px solid color-mix(in sRGB, var(--tb-primary-400), var(--tb-grey-500) 75%);
-    }
+html:has(#color-scheme-dark:checked) {
+  body {
+    @include dark-mode;
+  }
 }

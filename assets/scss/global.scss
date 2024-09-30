@@ -1,5 +1,135 @@
 // assets/scss/global.scss
+
+/**
+ * This file contains global styles for the application.
+ * It’s particularly used for color scheme management and
+ * defining default styles for standard HTML elements.
+ */
+
+$font-family: 'Montserrat';
+:root {
+    color-scheme: light dark;
+}
+
+:where(html) {
+    --darkmode: 0;
+    container-name: root;
+    container-type: normal;
+}
+
 body {
-    color: $foreground-rgb;
-    background: $background-color;
+    margin: 0;
+    font-family: $font-family, sans-serif;
+    transition: all 0.1s ease-in-out;
+    color: var(--text-color);
+}
+
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+html:has(#color-scheme-light:checked) {
+    --darkmode: 0;
+}
+
+html:has(#color-scheme-dark:checked) {
+    --darkmode: 1;
+}
+
+@media (prefers-color-scheme: dark) {
+    html {
+        --darkmode: 1;
+    }
+}
+
+@media (prefers-color-scheme: light) {
+    html {
+        --darkmode: 0;
+    }
+}
+
+
+/**
+ * This mixin is used as a base to style input elements.
+ * It’s used to ensure consistency across all input elements in the application.
+ */
+
+@mixin input-style {
+    border: none;
+    font-family: $font-family, sans-serif;
+    border-radius: 8px;
+    padding: 12px 12px;
+    letter-spacing: 0.02em;
+    font-weight: 500;
+    font-size: 15px;
+    position: relative;
+    transition: all 0.1s ease-in-out;
+    outline: 1px solid color-mix(in sRGB, var(--tb-primary-500), transparent 75%);
+    &::placeholder {
+        color: var(--input-color-placeholder);
+    }
+    &:disabled {
+        opacity: 0.5;
+    }
+    &:focus {
+        &:not(:disabled) {
+            outline: var(--input-outline);
+        }
+    }
+    &:active {
+        &:not(:disabled) {
+            outline: var(--input-outline);
+        }
+    }
+    &:hover {
+        &:not(:disabled) {
+            outline: var(--input-outline);
+        }
+    }
+}
+
+
+/**
+ * This is the default style for input elements.
+ */
+
+input {
+    @include input-style;
+    padding: 12px 0;
+    text-indent: 12px;
+    color: var(--input-color);
+    background-color: var(--input-bg);
+    border: 1px solid var(--input-outline);
+}
+
+
+/**
+ * Our button component extends the input style mixin.
+ */
+
+button {
+    @include input-style;
+    background-color: var(--button-bg);
+    color: var(--button-color);
+    font-weight: 600;
+    opacity: 1;
+    outline: 1px solid color-mix(in sRGB, var(--tb-primary-500), transparent 75%);
+    &:not(:disabled) {
+        cursor: pointer;
+        &:hover {
+            background-color: color-mix(in sRGB, var(--tb-primary-400), transparent 65%);
+            outline: 1px solid color-mix(in sRGB, var(--tb-primary-500), transparent 50%);
+        }
+    }
+    &:disabled {
+        opacity: 0.5;
+    }
 }

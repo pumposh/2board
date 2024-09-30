@@ -1,14 +1,36 @@
+import { fileURLToPath } from 'url';
+
+const customComponents: Record<string, string> = {
+  'input': '~/components/ui/Input.vue',
+}
+
 export default defineNuxtConfig({
+  components: {
+    global: true,
+    dirs: ['~/components'],
+  },
+
   css: ['~/assets/scss/main.scss'],
 
   vite: {
     css: {
       preprocessorOptions: {
         scss: {
-          additionalData: '@import "~/assets/scss/variables.scss";'
+          additionalData: '@import "~/assets/scss/variables.scss";',
+          api: 'modern-compiler',
         }
       }
-    }
+    },
+  },
+
+  alias: {
+    '@': '/',
+    '@ui': '/components/ui',
+    '@components': '/components',
+    '@composables': '/composables',
+    '@assets': '/assets',
+    '@utils': '/utils',
+    '@types': '/types',
   },
 
   plugins: [
@@ -29,4 +51,14 @@ export default defineNuxtConfig({
   },
 
   compatibilityDate: '2024-09-11',
+  modules: ['@nuxt/fonts'],
+  fonts: {
+    families: [
+      { name: 'Montserrat', provider: 'google' },
+      { name: 'Quicksand', provider: 'google' },
+    ]
+  },
+  app: {
+    pageTransition: { name: 'page', mode: 'out-in' }
+  },
 })

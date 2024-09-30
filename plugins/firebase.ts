@@ -1,4 +1,3 @@
-import { defineNuxtPlugin, useRuntimeConfig } from "#app";
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 
@@ -25,11 +24,14 @@ export default defineNuxtPlugin((nuxtApp) => {
     analytics = getAnalytics(app);
   }
 
-  // Inject $firebase into the Nuxt context
-  nuxtApp.provide("firebase", {
+  const provision = {
     app,
     analytics,
-  });
+  }
+
+  nuxtApp.vueApp.provide("firebase", provision);
+  // Inject $firebase into the Nuxt context
+  nuxtApp.provide("firebase", provision);
 
   // Log a message to verify Firebase initialization
   console.log("Firebase initialized with config:", firebaseConfig);

@@ -2,12 +2,24 @@ import { useFetch } from 'nuxt/app';
 import { ref } from 'vue';
 import { isError } from '../utils/error';
 
+export interface PlxMessage {
+  role: string;
+  content: string;
+  id: string;
+}
+
+export interface PlxResponse {
+  choices: {
+    message: PlxMessage;
+  }[];
+}
+
 export const usePerplexity = () => {
-  const response = ref<string | null>(null);
+  const response = ref<PlxResponse | null>(null);
   const loading = ref<boolean>(false);
   const error = ref<Error | null>(null);
 
-  const sendMessage = async (messages: string[]) => {
+  const sendMessage = async (messages: PlxMessage[]) => {
     loading.value = true;
     error.value = null;
     try {

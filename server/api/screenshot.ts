@@ -1,19 +1,28 @@
-import { webkit } from "playwright";
-import { ab2blob, buffer2ab } from "~/utils/data";
+import puppeteer from 'puppeteer';
+import { str2ab, ab2blob } from '../../utils/data';
 
-async function takeScreenshot(url: string) {
-  const browser = await webkit.launch();
-  const page = await browser.newPage();
-
+async function takeScreenshot(
+  url: string
+): Promise<string | { error: string }> {
   try {
-    await page.goto(url);
-    const screenshot = await page.screenshot();
-    return screenshot;
-  } catch (error) {
-    console.error("Screenshot error:", error);
+    const browser = await puppeteer.launch();
+    try {
+      const page = await browser.newPage();
+  
+      await page.goto(url);
+      const screenshot = await page.screenshot({
+        encoding: 'base64',
+      });
+      return screenshot;
+    } catch (error) {
+      console.error("Screenshot error:", error);
+      return { error: "Failed to take screenshot" };
+    } finally {
+      await browser.close();
+    }
+  } catch (e) {
+    console.error("Screenshot error:", e);
     return { error: "Failed to take screenshot" };
-  } finally {
-    await browser.close();
   }
 }
 
@@ -31,12 +40,18 @@ export default defineEventHandler(async (event) => {
 
   try {
     console.log("Taking screenshot of:", url);
-    const screenshot = await takeScreenshot(url);
-    console.log(screenshot);
-    if ('error' in screenshot) throw screenshot;
-    const arrayBuffer = buffer2ab(screenshot);
-    const blob = ab2blob(arrayBuffer);
+    const screenshotB64 = await takeScreenshot(url);
+
+    if (
+      typeof screenshotB64 !== 'string'
+      && 'error' in screenshotB64
+    ) throw screenshotB64;
+
+    const screenshot = str2ab(screenshotB64);
+    const blob = ab2blob(screenshot);
+
     setHeader(event, "Content-Type", "image/png");
+
     return blob;
   } catch (error) {
     console.error("Screenshot error:", error);

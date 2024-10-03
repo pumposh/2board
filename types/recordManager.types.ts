@@ -1,4 +1,4 @@
-import { recordManager } from '@utils/extensions/recordManager/recordManager';
+import { recordManager } from '../utils/extensions/recordManager/recordManager';
 
 export type IdObj = { id: string };
 

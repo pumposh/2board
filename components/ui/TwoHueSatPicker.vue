@@ -37,25 +37,10 @@ const baseSaturation = useCookie<number>('base-saturation', {
     default: () => 22,
 });
 
-const noTransition = async () => {
-  const root = document.querySelector(':root');
-  (root as HTMLElement)?.style.setProperty('--transition-speed', '0s');
-  await asyncTimeout(0);
-  (root as HTMLElement)?.style.setProperty('--transition-speed', '0.2s');
-}
-
 const setColorScheme = (hue: number, saturation: number) => {
-  const root = document.querySelector(':root');
-  (root as HTMLElement)?.style.setProperty('--base-hue', hue.toString());
-  (root as HTMLElement)?.style.setProperty('--base-saturation', `${saturation}%`);
+  document.documentElement.style.setProperty('--base-hue', hue.toString());
+  document.documentElement.style.setProperty('--base-saturation', `${saturation}%`);
 };
-
-onMounted(() => {
-  setTimeout(() => {
-    noTransition();
-    setColorScheme(baseHue.value, baseSaturation.value);
-  }, 0);
-});
 
 watch([baseHue, baseSaturation], () => {
   setColorScheme(baseHue.value, baseSaturation.value);

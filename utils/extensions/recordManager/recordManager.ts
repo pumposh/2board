@@ -40,12 +40,12 @@ import {
   nullishFilter,
   objectFilter,
   objectKeys,
-} from '@utils/extensions';
+} from '../';
 import { reactive, watch, computed, ref } from 'vue';
-import { isEqual } from '@utils/extensions/diff';
+import { isEqual } from '../diff';
 import {
   setNestedChildOnRecord,
-} from '@utils/extensions/nest';
+} from '../nest';
 import {
   isItemWithComputed,
   itemWithComputedToRaw,
@@ -60,7 +60,7 @@ import type {
   Meta,
   TargetOrID,
   WithComputed,
-} from '@types/recordManager.types';
+} from '../../../types';
 
 /** Type assertion is safe but support should be also added to @caresend/utils */
 const objectMap = _objectMap as unknown as <T, O>(

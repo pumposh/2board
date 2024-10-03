@@ -1,6 +1,3 @@
-import { navigateTo, useRouter } from "nuxt/app";
-import { computed } from "vue";
-
 type Router = ReturnType<typeof useRouter>;
 type BaseRoute = ReturnType<Router['getRoutes']>[0];
 

@@ -19,7 +19,7 @@ definePageMeta({
 
 onMounted(() => {
   const { $firebase } = useNuxtApp()
-  console.log("Firebase app initialized:", $firebase.app)
+  console.log("Firebase app initialized")
   if ($firebase.analytics) {
     console.log("Firebase analytics initialized")
   } else {

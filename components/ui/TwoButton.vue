@@ -109,7 +109,7 @@ const buttonClass = computed<string[]>(() => {
 }
 
 .TwoButton--outline {
-    border: 1px solid $tb-primary-500;
+    border: 1px solid var(--tb-primary-500);
     background-color: transparent;
 }
 

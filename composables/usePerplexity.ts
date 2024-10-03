@@ -1,4 +1,3 @@
-import { useFetch } from 'nuxt/app';
 import { ref } from 'vue';
 import { isError } from '../utils/error';
 
@@ -23,7 +22,7 @@ export const usePerplexity = () => {
     loading.value = true;
     error.value = null;
     try {
-      const { data } = await useFetch('/api/perplexity', {
+      const { data } = await $fetch('/api/perplexity', {
         method: 'POST',
         body: { messages }
       });

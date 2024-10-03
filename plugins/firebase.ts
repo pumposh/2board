@@ -32,7 +32,4 @@ export default defineNuxtPlugin((nuxtApp) => {
   nuxtApp.vueApp.provide("firebase", provision);
   // Inject $firebase into the Nuxt context
   nuxtApp.provide("firebase", provision);
-
-  // Log a message to verify Firebase initialization
-  console.log("Firebase initialized with config:", firebaseConfig);
 });

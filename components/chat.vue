@@ -19,9 +19,9 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { usePerplexity, type PlxMessage } from '@composables/usePerplexity';
-import TwoInput from '@ui/TwoInput.vue';
+import TwoInput from '@components/ui/TwoInput.vue';
 
-const props = defineProps({
+const { disabled } = defineProps({
   disabled: {
     type: Boolean,
     default: false,

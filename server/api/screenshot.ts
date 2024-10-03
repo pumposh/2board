@@ -1,28 +1,36 @@
 import puppeteer from 'puppeteer';
-import { str2ab, ab2blob } from '../../utils/data';
+import { str2ab, ab2blob } from '@utils/data';
 
 async function takeScreenshot(
   url: string
-): Promise<string | { error: string }> {
+): Promise<Blob> {
   try {
     const browser = await puppeteer.launch();
     try {
       const page = await browser.newPage();
-  
+
       await page.goto(url);
-      const screenshot = await page.screenshot({
-        encoding: 'base64',
-      });
-      return screenshot;
+
+      const screenshot = await page.screenshot({ type: "png", fullPage: true })
+      const blob = ab2blob(screenshot.buffer);
+  
+      await browser.close();
+      return blob;
     } catch (error) {
-      console.error("Screenshot error:", error);
-      return { error: "Failed to take screenshot" };
+      await browser.close();
+      throw createError({
+        statusCode: 500,
+        statusMessage: `Failed to take screenshot: ${error instanceof Error ? error.message : "Unknown error"}`,
+      });
     } finally {
       await browser.close();
     }
   } catch (e) {
     console.error("Screenshot error:", e);
-    return { error: "Failed to take screenshot" };
+    throw createError({
+      statusCode: 500,
+      statusMessage: `Failed to take screenshot: ${e instanceof Error ? e.message : "Unknown error"}`,
+    });
   }
 }
 
@@ -31,31 +39,30 @@ export default defineEventHandler(async (event) => {
   const url = query.url;
 
   if (!url) {
-    return { error: "URL is required" };
+    throw createError({
+      statusCode: 400,
+      statusMessage: "URL is required",
+    });
   }
 
   if (typeof url !== "string") {
-    return { error: "Invalid URL" };
+    throw createError({
+      statusCode: 400,
+      statusMessage: "Invalid URL",
+    });
   }
 
   try {
     console.log("Taking screenshot of:", url);
-    const screenshotB64 = await takeScreenshot(url);
 
-    if (
-      typeof screenshotB64 !== 'string'
-      && 'error' in screenshotB64
-    ) throw screenshotB64;
-
-    const screenshot = str2ab(screenshotB64);
-    const blob = ab2blob(screenshot);
+    const blob = await takeScreenshot(url);
 
     setHeader(event, "Content-Type", "image/png");
 
     return blob;
   } catch (error) {
     console.error("Screenshot error:", error);
-    return createError({
+    throw createError({
       statusCode: 500,
       statusMessage: `Failed to take screenshot: ${error instanceof Error ? error.message : "Unknown error"}`,
     });

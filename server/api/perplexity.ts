@@ -5,7 +5,7 @@ export default defineEventHandler(async (event) => {
   const response = await fetch("https://api.perplexity.ai/chat/completions", {
     method: "POST",
     headers: {
-      Authorization: `Bearer ${config.public.perplexityApiKey}`,
+      Authorization: `Bearer ${config.public.PERPLEXITY_API_KEY}`,
       "Content-Type": "application/json",
     },
     body: JSON.stringify({

@@ -8,10 +8,13 @@
       v-model="url" 
       fullWidth
       placeholder="Enter URL to screenshot"
+      :loading="loading"
       buttonIcon="fa-solid fa-window-restore"
       @submit="takeScreenshot"
     />
-    <img v-if="fileUrl" :src="fileUrl" alt="Screenshot" />
+    <div class="Screenshot__image" ref="imageContainer">
+      <!-- <img v-if="fileUrl" :src="fileUrl" alt="Screenshot" /> -->
+    </div>
     <Chat
       class="Screenshot__chat"
       :disabled="!fileUrl"
@@ -38,15 +41,24 @@ useSeoMeta({
 })
 
 const url = ref("https://www.google.com");
+const loading = ref<boolean>(false);
 const file = ref<File | null>(null);
 const fileUrl = computed(() =>
-  file.value ? URL.createObjectURL(file.value) : null
+  file.value ? (URL || webkitURL).createObjectURL(file.value) : null
 );
+
+const imageContainer = ref<HTMLDivElement | null>(null);
+
+watch(fileUrl, (newUrl) => {
+  console.log("fileUrl changed:", newUrl);
+});
 
 const takeScreenshot = async () => {
   if (!url.value) return;
-  useFetch(`/api/screenshot`, {
+  loading.value = true;
+  const response = await $fetch(`/api/screenshot`, {
     query: { url: url.value },
+    responseType: 'blob',
     onRequestError: (error) => {
       console.error("Request Error:", error);
     },
@@ -55,13 +67,29 @@ const takeScreenshot = async () => {
     },
     onResponse: (response) => {
       const blob = response.response._data;
-      blob.fileName = "screenshot.png";
-      blob.lastModifiedDate = Date.now();
-      blob.contentType = "image/png";
-      console.log(blob);
-      file.value = blob;
+      console.log("blob:", blob);
+      file.value = file.value ?? new File([blob], "screenshot.png", { type: "image/png" });
+      // Create a download link for the screenshot
+      const downloadLink = document.createElement('a');
+      downloadLink.href = URL.createObjectURL(file.value);
+      downloadLink.download = 'screenshot.png';
+      
+      // Trigger the download
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      document.body.removeChild(downloadLink);
+
+      // Clean up the object URL
+      URL.revokeObjectURL(downloadLink.href);
+      const image = new Image();
+      image.src = URL.createObjectURL(file.value);
+      image.onload = () => {
+        loading.value = false;
+      };
+      imageContainer.value?.appendChild(image);
     },
   });
+  loading.value = false;
 };
 </script>
 

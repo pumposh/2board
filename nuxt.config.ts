@@ -1,11 +1,8 @@
-import { fileURLToPath } from 'url';
-
-const customComponents: Record<string, string> = {
-  'input': '~/components/ui/Input.vue',
-}
+import { fileURLToPath } from "url";
 
 export default defineNuxtConfig({
   app: {
+    pageTransition: { name: 'page', mode: 'out-in' },
     head: {
       charset: 'utf-8',
       title: '2board',
@@ -20,6 +17,8 @@ export default defineNuxtConfig({
 
   css: ['~/assets/scss/main.scss'],
 
+  devtools: { enabled: false },
+
   vite: {
     css: {
       preprocessorOptions: {
@@ -32,13 +31,15 @@ export default defineNuxtConfig({
   },
 
   alias: {
-    '@': '/',
-    '@ui': '/components/ui',
-    '@components': '/components',
-    '@composables': '/composables',
-    '@assets': '/assets',
-    '@utils': '/utils',
-    '@types': '/types',
+    '@ui': fileURLToPath(new URL('./components/ui', import.meta.url)),
+    '@components': fileURLToPath(new URL('./components', import.meta.url)),
+    '@composables': fileURLToPath(new URL('./composables', import.meta.url)),
+    '@utils': fileURLToPath(new URL('./utils', import.meta.url)),
+    '@extensions': fileURLToPath(new URL('./utils/extensions', import.meta.url)),
+    '@types': fileURLToPath(new URL('./types', import.meta.url)),
+    '@pages': fileURLToPath(new URL('./pages', import.meta.url)),
+    '@layouts': fileURLToPath(new URL('./layouts', import.meta.url)),
+    '@assets': fileURLToPath(new URL('./assets', import.meta.url)),
   },
 
   plugins: [
@@ -54,19 +55,26 @@ export default defineNuxtConfig({
       FIREBASE_MESSAGING_SENDER_ID: process.env.FIREBASE_MESSAGING_SENDER_ID,
       FIREBASE_APP_ID: process.env.FIREBASE_APP_ID,
       FIREBASE_MEASUREMENT_ID: process.env.FIREBASE_MEASUREMENT_ID,
-      perplexityApiKey: process.env.PERPLEXITY_API_KEY
+      PERPLEXITY_API_KEY: process.env.PERPLEXITY_API_KEY
     }
+  },
+
+  typescript: {
+    typeCheck: true,
+    tsConfig: {
+      compilerOptions: {
+        jsx: 'preserve',
+        jsxImportSource: 'vue',
+      },
+    },
   },
 
   compatibilityDate: '2024-09-11',
   modules: ['@nuxt/fonts'],
-    fonts: {
-      families: [
-        { name: 'Montserrat', provider: 'google' },
-        { name: 'Quicksand', provider: 'google' },
-      ]
-    },
-    app: {
-      pageTransition: { name: 'page', mode: 'out-in' }
-    },
+  fonts: {
+    families: [
+      { name: 'Montserrat', provider: 'google' },
+      { name: 'Quicksand', provider: 'google' },
+    ]
+  },
 })

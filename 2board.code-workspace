@@ -1,0 +1,41 @@
+{
+    "folders": [
+		{
+			"name": "2board",
+			"path": "."
+		}
+	],
+    "settings": {
+        "workbench.colorCustomizations": {
+            "activityBar.activeBackground": "#edc6b2",
+            "activityBar.background": "#edc6b2",
+            "activityBar.foreground": "#15202b",
+            "activityBar.inactiveForeground": "#15202b99",
+            "activityBarBadge.background": "#249b4d",
+            "activityBarBadge.foreground": "#e7e7e7",
+            "commandCenter.border": "#15202b99",
+            "sash.hoverBorder": "#edc6b2",
+            "statusBar.background": "#e3a889",
+            "statusBar.foreground": "#15202b",
+            "statusBarItem.hoverBackground": "#d98a60",
+            "statusBarItem.remoteBackground": "#e3a889",
+            "statusBarItem.remoteForeground": "#15202b",
+            "titleBar.activeBackground": "#e3a889",
+            "titleBar.activeForeground": "#15202b",
+            "titleBar.inactiveBackground": "#e3a88999",
+            "titleBar.inactiveForeground": "#15202b99"
+        },
+        "typescript.tsdk": "2board/node_modules/typescript/lib",
+        "peacock.color": "#E3A889",
+        "javascript.preferGoToSourceDefinition": true,
+        "js/ts.implicitProjectConfig.checkJs": false,
+        "autoRestart.fileGlobForTypescript": [
+            "2board/tsconfig.{json,app.json,app.js,js,ts}",
+            "!2board/.nuxt/**"
+        ],
+        "nuxtr.defaultPackageManager": "Yarn",
+        "nuxtr.vueFiles.style.alwaysScoped": true,
+        "nuxtr.vueFiles.style.defaultLanguage": "scss",
+        "nuxtr.openItemsAfterCreation": true
+    }
+}

@@ -4,8 +4,8 @@ import type {
   TargetOrID,
   WithComputed,
   IdObj,
-} from '../../../types/recordManager.types';
-import { isNullish } from '../';
+} from '@types';
+import { isNullish } from '@utils/extensions';
 
 /**
  * Helpers that allows store managers to accept either a target object or its ID

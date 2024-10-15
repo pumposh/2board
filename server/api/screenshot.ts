@@ -1,11 +1,20 @@
-import puppeteer from 'puppeteer';
-import { str2ab, ab2blob } from '@utils/data';
+import puppeteer from 'puppeteer-core';
+import chromium from '@sparticuz/chromium';
+import { ab2blob } from '@utils/data';
 
 async function takeScreenshot(
   url: string
 ): Promise<Blob> {
   try {
-    const browser = await puppeteer.launch();
+    chromium.setHeadlessMode = true;
+    chromium.setGraphicsMode = false;
+
+    const browser = await puppeteer.launch({
+      args: chromium.args,
+      defaultViewport: chromium.defaultViewport,
+      executablePath: await chromium.executablePath(),
+      headless: chromium.headless,
+    });
     try {
       const page = await browser.newPage();
 

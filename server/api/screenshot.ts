@@ -1,6 +1,8 @@
 import puppeteer from 'puppeteer-core';
 import chromium from '@sparticuz/chromium';
 import { ab2blob } from '@utils/data';
+import sanitizeHtml from 'sanitize-html';
+import { collapseWhiteSpace } from 'collapse-white-space';
 
 async function takeScreenshot(url: string): Promise<Blob> {
   try {
@@ -29,6 +31,15 @@ async function takeScreenshot(url: string): Promise<Blob> {
 
       const screenshot = await page.screenshot({ type: 'png', fullPage: true });
       const blob = ab2blob(screenshot.buffer);
+      // Getting the page source HTML
+      const pageSourceHTML = await page.content();
+      let sanitizedHTML = sanitizeHtml(pageSourceHTML, {
+        allowedTags: [],
+        allowedAttributes: {},
+      });
+      console.log('sanitized', sanitizedHTML);
+      let collapseWhiteSpaceHTML = collapseWhiteSpace(sanitizedHTML);
+      console.log('COLLAPSED', collapseWhiteSpaceHTML);
 
       await browser.close();
       return blob;

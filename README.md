@@ -40,3 +40,9 @@ Locally preview production build:
 ```bash
 bun preview
 ```
+
+Add this in your env for local path
+
+```LOCAL_EXECUTABLE_PATH="~/.cache/puppeteer/chrome/mac_arm-130.0.6723.69/chrome-mac-arm64/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing"
+
+```

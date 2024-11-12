@@ -10,8 +10,7 @@ async function takeScreenshot(url: string): Promise<Blob> {
     if (isLocal) {
       browser = await puppeteer.launch({
         args: ['--no-sandbox', '--disable-setuid-sandbox'],
-        executablePath:
-          '~/.cache/puppeteer/chrome/mac_arm-130.0.6723.69/chrome-mac-arm64/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing',
+        executablePath: process.env.LOCAL_EXECUTABLE_PATH,
         headless: 'new' as any,
       });
     } else {

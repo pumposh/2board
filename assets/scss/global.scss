@@ -121,12 +121,16 @@ button {
     color: var(--button-color);
     font-weight: 600;
     opacity: 1;
-    outline: 1px solid color-mix(in sRGB, var(--tb-primary-500), transparent 75%);
+    outline: 0px solid transparent;
     &:not(:disabled) {
         cursor: pointer;
         &:hover {
-            background-color: color-mix(in sRGB, var(--tb-primary-400), transparent 65%);
-            outline: 1px solid color-mix(in sRGB, var(--tb-primary-500), transparent 50%);
+            background-color: color-mix(in sRGB, var(--tb-primary-400), transparent 85%);
+            outline: 1px solid color-mix(in sRGB, var(--tb-primary-500), transparent 60%);
+        }
+        &:focus {
+            background-color: color-mix(in sRGB, var(--tb-primary-400), transparent 85%);
+            outline: 1px solid color-mix(in sRGB, var(--tb-primary-500), transparent 60%);
         }
     }
     &:disabled {

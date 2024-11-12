@@ -101,6 +101,10 @@ const handleSubmit = () => {
   height: 100%;
   position: absolute;
   right: 0;
+  min-width: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .TwoInput__input--with-button {

@@ -9,9 +9,16 @@ async function takeScreenshot(url: string): Promise<Blob> {
     const isLocal = process.env.IS_LOCAL;
     let browser;
 
+    const requestHeaders = {
+        'user-agent':
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36',
+        Referer: 'https://www.google.com/',
+    };
+
     if (isLocal) {
       browser = await puppeteer.launch({
         args: ['--no-sandbox', '--disable-setuid-sandbox'],
+        defaultViewport: chromium.defaultViewport,
         executablePath: process.env.LOCAL_EXECUTABLE_PATH,
         headless: 'new' as any,
       });
@@ -26,6 +33,7 @@ async function takeScreenshot(url: string): Promise<Blob> {
     }
     try {
       const page = await browser.newPage();
+      await page.setExtraHTTPHeaders({ ...requestHeaders });
 
       await page.goto(url);
 

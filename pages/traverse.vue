@@ -2,19 +2,18 @@
   <div>
     <h3>
       <i class="fa-solid fa-camera"></i>
-      Screenshot
+      Traverse
     </h3>
+    <div class="Screenshot__image-container" ref="imageContainer">
+    </div>
     <UiTwoInput
       v-model="url" 
       fullWidth
       placeholder="Enter URL to screenshot"
       :loading="loading"
-      buttonIcon="fa-solid fa-window-restore"
+      buttonIcon="fa-solid fa-chevron-right"
       @submit="takeScreenshot"
     />
-    <div class="Screenshot__image" ref="imageContainer">
-      <!-- <img v-if="fileUrl" :src="fileUrl" alt="Screenshot" /> -->
-    </div>
     <Chat
       class="Screenshot__chat"
       :disabled="!fileUrl"
@@ -24,23 +23,23 @@
 
 <script setup lang="ts">
 definePageMeta({
-  name: 'Screenshot',
+  name: 'Traverse',
   navIcon: 'fa-solid fa-window-restore',
 })
 
 useHead({
-  title: '2Board - Screenshot',
+  title: '2Board - Traverse',
   meta: [
-    { name: 'description', content: 'Take a screenshot of a website.' },
+    { name: 'description', content: 'Traverse the web with 2Board.' },
   ],
 })
 
 useSeoMeta({
-  title: 'Screenshot',
-  description: 'Take a screenshot of a website.',
+  title: 'Traverse',
+  description: 'Traverse the web with 2Board.',
 })
 
-const url = ref("https://www.google.com");
+const url = ref("https://www.evergy.com");
 const loading = ref<boolean>(false);
 const file = ref<File | null>(null);
 const fileUrl = computed(() =>
@@ -56,7 +55,7 @@ watch(fileUrl, (newUrl) => {
 const takeScreenshot = async () => {
   if (!url.value) return;
   loading.value = true;
-  const response = await $fetch(`/api/screenshot`, {
+  await $fetch(`/api/screenshot`, {
     query: { url: url.value },
     responseType: 'blob',
     onRequestError: (error) => {
@@ -67,8 +66,7 @@ const takeScreenshot = async () => {
     },
     onResponse: (response) => {
       const blob = response.response._data;
-      console.log("blob:", blob);
-      file.value = file.value ?? new File([blob], "screenshot.png", { type: "image/png" });
+      file.value = new File([blob], "screenshot.png", { type: "image/png" });
       // Create a download link for the screenshot
       const downloadLink = document.createElement('a');
       downloadLink.href = URL.createObjectURL(file.value);
@@ -83,6 +81,9 @@ const takeScreenshot = async () => {
       URL.revokeObjectURL(downloadLink.href);
       const image = new Image();
       image.src = URL.createObjectURL(file.value);
+      image.style.width = '-webkit-fill-available';
+      image.style.borderRadius = '0 0 var(--tb-border-radius) var(--tb-border-radius)';
+      // image.style.objectFit = 'contain';
       image.onload = () => {
         loading.value = false;
       };
@@ -94,11 +95,36 @@ const takeScreenshot = async () => {
 </script>
 
 <style scoped lang="scss">
-img {
-  width: 100%;
-  height: 100%;
-  border-radius: 0 0 var(--tb-border-radius) var(--tb-border-radius);
-  object-fit: contain;
+.Screenshot__image-container {
+  max-width: 100%;
+  height: 30dvw;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  overflow: scroll;
+  scrollbar-width: none;
+  border-radius: var(--tb-border-radius);
+  min-height: 200px;
+  margin: 2rem 8px 1.5rem;
+  outline: 8px solid var(--button-bg);
+  background-color: var(--input-bg);
+  transition: all 0.2s ease-in-out;
+  &:not(:has(img)) {
+    &:after {
+      content: 'Perform a search to begin';
+      text-align: center;
+      height: 100%;
+      margin: 0 50px;
+      color: var(--input-color-placeholder);
+      text-transform: uppercase;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      opacity: 0.5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
 }
 .Screenshot__chat {
   margin-top: 1rem;
